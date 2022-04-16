@@ -1,7 +1,4 @@
 <?php
-
-
-
  $host_name = '34.150.130.46' ;
  $database_name = 'blurb';
  $username = 'root' ;
@@ -12,46 +9,48 @@
 try 
 {
    $db = new PDO($dsn, $username, $password);
-   
-   // dispaly a message to let us know that we are connected to the database 
-   //echo "<p>You are connected to the database --- dsn=$dsn, user=$username, pwd=$password </p>";
-   //$query_test = $db->prepare("SELECT * FROM UIDToUsername");
-   //$query_test->execute();
-   // while ($result = $query_test->fetch(PDO::FETCH_ASSOC)) {
-   //     echo $result['username']."<br/>";
-   // }
+   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//    $method = $_SERVER['REQUEST_METHOD'];
+//    $request = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 
-   $method = $_SERVER['REQUEST_METHOD'];
-   $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
+//    $data = json_decode(file_get_contents("php://input"),true);
 
-   switch($method){
-        case 'GET':
-            $sql = "SELECT * FROM UIDToUsername";
-            break;
+//    $uid="";
+//    $username="";
+
+//    switch($method){
+//         case 'GET':
+//             $sql = "SELECT * FROM UIDToUsername";
+//             break;
         
-        case 'POST':
-            $uid = $_POST['uid'];
-            $username = $_POST['username'];
-            $sql = "INSERT INTO UIDToUsername (uid, username) VALUES ($uid,$username))";
+//         case 'POST':
+//             //check inputs
+// 		    if(!isset($data['uid']) || !isset($data['username']))
+// 		    {
+// 			   return $json = array("success" => false, "Info" => "Invalid Inputs");
+// 		    } 
+// 		    //sanitise inputs
+// 		    $uid = htmlspecialchars(strip_tags($data['uid']));
+// 		    $username = htmlspecialchars(strip_tags($data['username']));
+//             $sql = "INSERT INTO UIDToUsername (uid, username) VALUES ('$uid','$username'))";
+//             break;
+//    }
 
+//    //try the sql statement
+//    $result = $db->prepare($sql);
+   
+//    if(!$result){
+//     http_response_code(404);
+//     print_r($db->errorInfo());
+//     }else{
+//         $result -> execute();
+//     }
 
-   }
-
-   //try the sql statement
-   $result = $db->prepare($sql);
-   if(!$result){
-    http_response_code(404);
-    print_r($db->errorInfo());
-    }else{
-        $result -> execute();
-    }
-
-    if($method == "GET"){
-        echo json_encode($result -> fetch(PDO::FETCH_OBJ));
-    }elseif($method == "POST"){
-
-        echo json_encode($result);
-    }
+//     if($method == "GET"){
+//         echo json_encode($result -> fetchAll(PDO::FETCH_OBJ));
+//     }elseif($method == "POST"){
+//         echo json_encode($result);
+//     }
 
    
 }

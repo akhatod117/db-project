@@ -13,11 +13,12 @@
 ////////////////////////////////////////////
 
 /** S22, PHP (on local XAMPP or CS server) connect to MySQL instance (GCP) **/
-// $username = 'root';                      // or your username
-// $password = 'your-root-password';        // or your password
-// $host = 'cs4750:us-east4:db-demo';       // projectID = cs4750, SQL instance ID = db-demo
-// $dbname = 'guestbook';                   // database name = guestbook
-// $dsn = "mysql:host=your-SQL-public-IP-address;dbname=$dbname";       // connect PHP (XAMPP) to DB (GCP)
+ $username = 'root';                      // or your username
+ $password = 'AwzlmleicOParaq0';        // or your password
+ //$host = 'cs4750:us-east4:db-demo';       // projectID = cs4750, SQL instance ID = db-demo
+ $host = '34.150.130.46';
+ $dbname = 'blurb';                   // database name = guestbook
+ $dsn = "mysql:host=$host;dbname=$dbname";       // connect PHP (XAMPP) to DB (GCP)
 
 // to get public IP addres of the SQL instance, go to GCP SQL overview page
 
@@ -29,11 +30,11 @@
 ////////////////////////////////////////////
 
 /** S22, PHP (on GCP, local XAMPP, or CS server) connect to MySQL (on local XAMPP) **/
-$username = 'skotha';
-$password = 'Skotha!123';
-$host = 'localhost:3306';
-$dbname = 'guestbook';
-$dsn = "mysql:host=$host;dbname=$dbname";  
+//$username = 'skotha';
+//$password = 'Skotha!123';
+//$host = 'localhost:3306';
+//$dbname = 'guestbook';
+//$dsn = "mysql:host=$host;dbname=$dbname";  
 ////////////////////////////////////////////
 
  
@@ -63,7 +64,7 @@ $dsn = "mysql:host=$host;dbname=$dbname";
 try 
 {
    $db = new PDO($dsn, $username, $password);
-   
+   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    // dispaly a message to let us know that we are connected to the database 
    //echo "<p>You are connected to the database --- dsn=$dsn, user=$username, pwd=$password </p>";
 }
