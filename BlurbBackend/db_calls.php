@@ -42,7 +42,7 @@ function getAllUsers()
 	if(!$statement){
 	   die("retrieve all query failed");
 	}else{
-	   $results = $statement->fetchAll();   
+	   $results = $statement->fetchAll(PDO::FETCH_OBJ);   
 
 	   $statement->closeCursor();
 
