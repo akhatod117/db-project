@@ -19,6 +19,7 @@ $list_of_users = NULL;
 switch($method){
     case 'GET':
         $list_of_users = getAllUsers();
+        echo json_encode($list_of_users);
         break;
         
     case 'POST':
@@ -34,9 +35,9 @@ switch($method){
         break;
 }
 
-if($method == "GET"){
+/*if($method == "GET"){
    echo json_encode($list_of_users);
 }else if($method == "POST"){
    //echo json_encode($result);
-}
+}*/
 ?>
