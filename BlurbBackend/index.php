@@ -15,7 +15,7 @@ $uri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 $data = json_decode(file_get_contents("php://input"),true);
 
 $list_of_users = NULL;
-$list_of_posts = NULL:
+$list_of_posts = NULL;
 
 switch($method){
     case 'GET':
@@ -23,7 +23,8 @@ switch($method){
             $list_of_users = getAllUsers();
             echo json_encode($list_of_users);
         }else if($uri[3] == 'post'){
-            echo ("here");
+            $list_of_posts = getAllPosts();
+            echo json_encode($list_of_posts);
         }
         break;
         
@@ -39,10 +40,4 @@ switch($method){
         addUser($uid, $username);
         break;
 }
-
-/*if($method == "GET"){
-   echo json_encode($list_of_users);
-}else if($method == "POST"){
-   //echo json_encode($result);
-}*/
 ?>

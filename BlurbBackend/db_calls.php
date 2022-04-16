@@ -6,12 +6,9 @@ function addUser($uid,$username)
 	global $db;
 
 	// write sql
-	// insert into friends values('someone', 'cs', 4)";
-	//$query = "insert into friends values('" . $name . "', '" . $major . "'," . $year . ")";
 	$query = "insert into UIDToUsername values(:uid, :username)";
 
 	// execute the sql
-	//$statement = $db->query($query);   // query() will compile and execute the sql
 	$statement = $db->prepare($query);
 
 	$statement->bindValue(':uid', $uid);
@@ -31,6 +28,28 @@ function getAllUsers()
 {
 	global $db;
 	$query = "select * from UIDToUsername";
+	
+	//1. prepare
+	//2. bindValue & execute
+	$statement = $db->prepare($query);
+	$statement->execute();
+	
+	// fetchAll() returns an array of all rows in the result set
+	if(!$statement){
+	   die("retrieve all query failed");
+	}else{
+	   $results = $statement->fetchAll(PDO::FETCH_OBJ);   
+
+	   $statement->closeCursor();
+
+	   return $results;
+	}
+}
+
+function getAllPosts()
+{
+	global $db;
+	$query = "select * from Post";
 	//$statement = $db->query($query);
 	
 	//1. prepare
