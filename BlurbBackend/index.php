@@ -10,16 +10,21 @@ require('connect-gcp.php');
 require('db_calls.php');
 
 $method = $_SERVER['REQUEST_METHOD'];
-$request = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+$uri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 
 $data = json_decode(file_get_contents("php://input"),true);
 
 $list_of_users = NULL;
+$list_of_posts = NULL:
 
 switch($method){
     case 'GET':
-        $list_of_users = getAllUsers();
-        echo json_encode($list_of_users);
+        if($uri[3] == 'user'){
+            $list_of_users = getAllUsers();
+            echo json_encode($list_of_users);
+        }else if($uri[3] == 'post'){
+            echo ("here");
+        }
         break;
         
     case 'POST':
