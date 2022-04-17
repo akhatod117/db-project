@@ -98,12 +98,13 @@ function checkUser($email,$password)
 	}else{
       $auth = $statement->fetch(PDO::FETCH_OBJ);
 	  $statement->closeCursor();
-	  if($auth == false){
+	  /*if($auth == false){
 		$exists = 'false';
 		return $exists;
 	  }else{
 		return $exists;;
-	  }
+	  }*/
+	  return $auth;
 	}
 }
 
@@ -156,7 +157,7 @@ function getAllUsers()
 function getAllPosts()
 {
 	global $db;
-	$query = "select * from Post NATURAL JOIN UIDToUsername";
+	$query = "select * from Post NATURAL JOIN UIDToUsername ORDER BY date DESC";
 	//$statement = $db->query($query);
 	
 	//1. prepare

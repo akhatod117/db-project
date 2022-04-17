@@ -4,6 +4,8 @@ import {useState, useEffect} from 'react';
 import './Post.css';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import {Nav, Navbar} from 'react-bootstrap';
+import {BrowserRouter, Route, Switch, useLocation, Link} from 'react-router-dom';
 
 
 
@@ -18,6 +20,10 @@ export default function Feed(){
     const [thread, setThread] = useState("");
     const[filterByThread, setFilterByThread] = useState(false);
     const[relatedTopics, setRelatedTopics] = useState([]);
+    const location = useLocation();
+    console.log("location: ", location);
+    const uid = location.state.uid;
+    console.log('uid: ', uid);
 
 
 
@@ -85,7 +91,16 @@ export default function Feed(){
     return(
 
 
-        //<div></div>
+        <div>
+            <Navbar bg='dark' variant='dark'>
+                <Navbar.Brand>Blurb</Navbar.Brand>
+                <Nav className='m-auto' activeKey={location.pathname}>
+                <Nav.Link as={Link}  to={'/feed'} state = {{uid}} >Feed</Nav.Link>
+                <Nav.Link as={Link} to={'/create'} state = {{uid}} >Create A Blurb</Nav.Link> 
+                <Nav.Link as={Link}  to={'/profile'} state = {{uid}} >Profile</Nav.Link>
+                
+                </Nav>
+            </Navbar>
         <div>
             <Button variant='primary' onClick={handleSort}>Sort by Likes</Button>
 
@@ -111,6 +126,7 @@ export default function Feed(){
                 Total Users: {totalUsers}
             </div>
         </div>
+    </div>
     );
 }
 
@@ -135,35 +151,42 @@ function Post({post, changedLikes, setLikes}){
     }
 
     return (
-        <div className="post">
-            <div className = "postWrapper">
-                <div className = "postTop">
-                    <div className = 'postDescription'>
-                        {post.description}
+        
+            <div className="post">
+                <div className = "postWrapper">
+                    <div className = "postTop">
+                        <div className = 'postDescription'>
+                            {post.description}
+                        </div>
+
+                        <div>
+                            Post {post.pid}
+                        </div>
+                        
+                    </div>
+
+                    
+                    <div className = 'userName'>
+                        by {post.username} on {post.date}
+                    </div>
+                        
+                    <div>
+                        Liked by {post.numberOfLikes} others
+                        <span>
+                        <Button variant="primary" onClick={incrementLikes}>Like</Button>
+                        </span>
                     </div>
 
                     <div>
-                        Post {post.pid}
+                        <span>
+                        <Button variant="primary" onClick={incrementLikes}>Comments </Button>
+                        </span>
+                        
                     </div>
                     
-                </div>
-
-                
-                <div className = 'userName'>
-                    by {post.username} on {post.date}
-                </div>
-                    
-                <div>
-                    Liked by {post.numberOfLikes} others
-                </div>
-
-                <div>
-                    <Button variant="primary" onClick={incrementLikes}>Like</Button>
-                </div>
-                
-                </div>
-        </div>
-
+                    </div>
+            </div>
+        
     );
 }
 

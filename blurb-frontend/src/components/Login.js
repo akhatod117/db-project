@@ -2,16 +2,22 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
+import {Nav, Navbar} from 'react-bootstrap';
+import {BrowserRouter, Route, Switch, useLocation, useNavigate} from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.css';
 import "./Login.css";
+
 
 //source code from https://serverless-stack.com/chapters/create-a-login-page.html
 
 
 
 
-export default function Login() {
+export default function Login({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [loggedIn, setLoggedIn] = useState("");
 
@@ -31,8 +37,9 @@ export default function Login() {
 
             const auth = (res.data);
             console.log(auth.check);
-            if(auth.check == 'true'){
+            if(auth.check.uid != null){
                 setLoggedIn('logged in successfully')
+                navigate('/feed', { state: {uid: auth.check.uid}})
             }else{
                 setLoggedIn("login failed :(")
             }
@@ -44,6 +51,15 @@ export default function Login() {
   }
 
   return (
+    <div>
+    <Navbar bg='dark' variant='dark'>
+        <Navbar.Brand>Blurb</Navbar.Brand>
+        <Nav className='m-auto' activeKey={location.pathname}>
+          <Nav.Link href='/login'>Login</Nav.Link>
+          <Nav.Link href='/register'>Register</Nav.Link>
+          
+        </Nav>
+      </Navbar>
     <div className="Login">
       <Form onSubmit={handleSubmit}>
         <Form.Group size="lg" controlId="email">
@@ -72,6 +88,7 @@ export default function Login() {
       <div>
           {loggedIn}
       </div>
+    </div>
     </div>
   );
 }
