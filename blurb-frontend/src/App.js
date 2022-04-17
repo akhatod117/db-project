@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import {Routes, Route, Link} from 'react-router-dom';
 
-export default function AppTab() {
+export default function App() {
   return (
     <div>
       <Navbar bg='dark' variant='dark'>

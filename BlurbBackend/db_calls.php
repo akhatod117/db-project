@@ -256,6 +256,82 @@ function updatePostLikes($uid, $pid, $numberOfLikes)
    }
 }
 
+function getFilterByThread($threadName){
+	global $db;
+	$query = "select * from Thread NATURAL JOIN Associated NATURAL JOIN Post WHERE name =:threadName AND threadName =:threadName";
+	//$statement = $db->query($query);
+	//1. prepare
+	//2. bindValue & execute
+	$statement = $db->prepare($query);
+	$statement->bindValue(':threadName', $threadName);
+	$statement->execute();
+	
+	// fetchAll() returns an array of all rows in the result set
+	if(!$statement){
+	   die("retrieve all query failed");
+	}else{
+	   $results = $statement->fetchAll(PDO::FETCH_OBJ);   
+
+	   $statement->closeCursor();
+
+	   return $results;
+	}
+
+}
+
+function getRelatedTopics($threadName){
+	global $db;
+	$query = "select relatedTopics from RelatedTopics WHERE threadName =:threadName;";
+	//$statement = $db->query($query);
+	//1. prepare
+	//2. bindValue & execute
+	$statement = $db->prepare($query);
+	$statement->bindValue(':threadName', $threadName);
+	$statement->execute();
+	
+	// fetchAll() returns an array of all rows in the result set
+	if(!$statement){
+	   die("retrieve all query failed");
+	}else{
+	   $results = $statement->fetchAll(PDO::FETCH_OBJ);   
+
+	   $statement->closeCursor();
+
+	   return $results;
+	}
+}
+
+
+function getUsers(){
+	global $db;
+	$x = NULL;
+	$query = "CALL countUsers(@:x)";
+	$query2 = "SELECT @:x as 'param1';$$";
+
+	$statement = $db->prepare($query);
+	$statement->bindValue(':x', $x);
+	$statement->execute();
+	if(!$statement){
+		die("statement did not work");
+	}else{
+		$statement->closeCursor();
+	}
+		
+	$statement1= $db->prepare($query2);
+	$statement1->bindValue(':x', $x);
+	$statement1->execute();
+	if(!$statement1){
+		die("advanced query failed");
+	 }else{
+		$results = $statement1->fetch(PDO::FETCH_OBJ);   
+ 
+		$statement1->closeCursor();
+ 
+		return $results;
+	 }
+
+}
+
 
 
 function getFriend_byName($name)

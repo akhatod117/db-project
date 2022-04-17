@@ -16,6 +16,7 @@ $data = json_decode(file_get_contents("php://input"),true);
 
 $list_of_users = NULL;
 $list_of_posts = NULL;
+$list_of_topics = NULL;
 
 switch($method){
     case 'GET':
@@ -33,6 +34,16 @@ switch($method){
             $list_of_posts = getPostsByLikes();
             echo json_encode($list_of_posts);
         }
+        else if($uri[3] == 'getUsers'){
+            echo json_encode(getUsers());
+        }else if($uri[3] == 'filterByThread'){
+            $list_of_posts = getFilterByThread($uri[4]);
+            echo json_encode($list_of_posts);
+        }else if($uri[3] == 'getRelatedTopics'){
+            $list_of_topics = getRelatedTopics($uri[4]);
+            echo json_encode($list_of_topics);
+        }
+        
         break;
         
     case 'POST':
