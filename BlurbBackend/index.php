@@ -20,24 +20,53 @@ $list_of_posts = NULL;
 switch($method){
     case 'GET':
         if($uri[3] == 'user'){
-            $list_of_users = getAllUsers();
-            echo json_encode($list_of_users);
+            if($uri[4] == null){
+                $list_of_users = getAllUsers();
+                echo json_encode($list_of_users);
+            }else{
+                echo json_encode(getUserByUID($uri[4]));
+            }
         }else if($uri[3] == 'post'){
             $list_of_posts = getAllPosts();
+            echo json_encode($list_of_posts);
+        }else if($uri[3] == 'postByLikes'){
+            $list_of_posts = getPostsByLikes();
             echo json_encode($list_of_posts);
         }
         break;
         
     case 'POST':
         //check inputs
-	    if(!isset($data['uid']) || !isset($data['username']))
-	    {
-		   return $json = array("success" => false, "Info" => "Invalid Inputs");
-	    } 
-	    //sanitise inputs
-	    $uid = htmlspecialchars(strip_tags($data['uid']));
-	    $username = htmlspecialchars(strip_tags($data['username']));
-        addUser($uid, $username);
+        if($uri[3] == 'createUser'){
+            if(!isset($data['email']) || !isset($data['password']))
+	        {
+		    return $json = array("success" => false, "Info" => "Invalid Inputs");
+	        }
+            //sanitise inputs
+	        $email = htmlspecialchars(strip_tags($data['email']));
+	        $password = htmlspecialchars(strip_tags($data['password']));
+            addUser($email, $password);
+        }else if($uri[3] == 'authenticateUser'){
+            if(!isset($data['email']) || !isset($data['password']))
+	        {
+		    return $json = array("success" => false, "Info" => "Invalid Inputs");
+	        }
+            //sanitise inputs
+	        $email = htmlspecialchars(strip_tags($data['email']));
+	        $password = htmlspecialchars(strip_tags($data['password']));
+            $userChecking = array("check" => checkUser($email, $password));
+            echo json_encode($userChecking);
+        }else if($uri[3] == 'incrementLikes'){
+            if(!isset($data['uid']) || !isset($data['pid'])|| !isset($data['numberOfLikes']) )
+	        {
+		        return $json = array("success" => false, "Info" => "Invalid Inputs");
+	        }
+            echo "called";
+            $uid = htmlspecialchars(strip_tags($data['uid']));
+	        $pid = htmlspecialchars(strip_tags($data['pid']));
+            $numberOfLikes = htmlspecialchars(strip_tags($data['numberOfLikes']));
+            updatePostLikes($uid, $pid, $numberOfLikes);
+        }
         break;
 }
 ?>
