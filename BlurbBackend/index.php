@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
@@ -42,6 +42,18 @@ switch($method){
         }else if($uri[3] == 'getRelatedTopics'){
             $list_of_topics = getRelatedTopics($uri[4]);
             echo json_encode($list_of_topics);
+        }else if($uri[3] == 'getUserInfo'){
+            if($uri[4] == null){
+                
+            }else{
+                echo json_encode(getUserInfo($uri[4]));
+            }
+        }else if($uri[3] == 'getUserPosts'){
+            if($uri[4] == null){
+                
+            }else{
+                echo json_encode(getUserPosts($uri[4]));
+            }
         }
         
         break;
@@ -68,15 +80,23 @@ switch($method){
             $userChecking = array("check" => checkUser($email, $password));
             echo json_encode($userChecking);
         }else if($uri[3] == 'incrementLikes'){
-            if(!isset($data['uid']) || !isset($data['pid'])|| !isset($data['numberOfLikes']) )
+            if(!isset($data['uid']) || !isset($data['pid']) || !isset($data['likeUid']))
 	        {
 		        return $json = array("success" => false, "Info" => "Invalid Inputs");
 	        }
-            echo "called";
             $uid = htmlspecialchars(strip_tags($data['uid']));
 	        $pid = htmlspecialchars(strip_tags($data['pid']));
+            $likeUid = htmlspecialchars(strip_tags($data['likeUid']));
+            updatePostLikes($uid, $pid, $likeUid);
+        
+        }else if($uri[3] == 'createBlurb'){
+            
+            $description = htmlspecialchars(strip_tags($data['description']));
+            $uid = htmlspecialchars(strip_tags($data['uid']));
             $numberOfLikes = htmlspecialchars(strip_tags($data['numberOfLikes']));
-            updatePostLikes($uid, $pid, $numberOfLikes);
+            $date = htmlspecialchars(strip_tags($data['date']));
+            $thread = htmlspecialchars(strip_tags($data['thread']));
+            createBlurb($description, $uid, $numberOfLikes, $date, $thread);
         }
         break;
 }

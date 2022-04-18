@@ -1,4 +1,5 @@
 <?php
+ header("Access-Control-Allow-Origin: http://localhost:3000");
  $host_name = '34.150.130.46' ;
  $database_name = 'blurb';
  $username = 'root' ;

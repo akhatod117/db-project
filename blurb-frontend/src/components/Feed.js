@@ -27,36 +27,41 @@ export default function Feed(){
 
 
 
+
     async function handleSubmit(event) {
         event.preventDefault();
-        const data = {
-            thread: thread
-        }
-        try {
-            await axios.get("http://localhost/db-project/BlurbBackend/index.php/filterByThread/"+thread).then(res => {
-    
-                const data = res.data
-                console.log(data)
-                setPosts(data)
-                setFilterByThread(true)
-            })
-        } catch (error) {
-            
+        if(thread == ""){
+            setLikes(!changedLikes);
+        }else{
+
+        
+            const data = {
+                thread: thread
+            }
+            try {
+                await axios.get("http://localhost/db-project/BlurbBackend/index.php/filterByThread/"+thread).then(res => {
+        
+                    const data = res.data
+                    setPosts(data)
+                    setFilterByThread(true)
+                    if(Object.keys(data).length === 0 ){
+                        setLikes(!changedLikes);                    
+                    }
+                }).then(res=>{
+                    axios.get("http://localhost/db-project/BlurbBackend/index.php/getRelatedTopics/"+thread)
+                    .then(res=>{
+                        const data = res.data
+                        console.log("HERERERERE")
+                        console.log(data)
+                        setRelatedTopics(data)
+                })
+                })
+            } catch (error) {
+                setLikes(!changedLikes);
+            }
         }
       }
 
-      useEffect( () =>{
-        if(setFilterByThread){
-            axios.get("http://localhost/db-project/BlurbBackend/index.php/getRelatedTopics/"+thread)
-                .then(res=>{
-                    const data = res.data
-                    console.log(data)
-                    setRelatedTopics(data)
-            })
-        }
-        
-        
-    },[setFilterByThread])
 
     useEffect( () =>{
         axios.get("http://localhost/db-project/BlurbBackend/index.php/post")
@@ -115,11 +120,20 @@ export default function Feed(){
                 />
                 </Form.Group>
             </Form>
+
+            <div>
+                Related Topics:
+                <div>
+                {relatedTopics.map((t) => (
+                    <span>{t.relatedTopics}, </span>
+                ))}
+                </div>
+            </div>
             
             
             <div>
                 {posts.map((p) => (
-                    <Post key={p.uid + p.pid} post={p} changedLikes = {changedLikes} setLikes = {setLikes}/>
+                    <Post key={p.uid + p.pid} post={p} changedLikes = {changedLikes} setLikes = {setLikes} uid={uid}/>
                 ))}
             </div>
             <div>
@@ -130,18 +144,16 @@ export default function Feed(){
     );
 }
 
-function Post({post, changedLikes, setLikes}){
+function Post({post, changedLikes, setLikes,uid}){
     //need: user-id, post text, post date, comments(add after posts are working)
-    console.log(post);
     
 
 
     async function incrementLikes(){
-        console.log('here');
         const data = {
             uid: post.uid,
             pid: post.pid,
-            numberOfLikes: post.numberOfLikes
+            likeUid: uid,
         }
         
         axios.post("http://localhost/db-project/BlurbBackend/index.php/incrementLikes", data)

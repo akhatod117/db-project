@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import {Nav, Navbar} from 'react-bootstrap';
-import {BrowserRouter, Route, Switch, useLocation} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, useLocation, useNavigate} from 'react-router-dom';
 import "./Register.css";
 
 //source code from https://serverless-stack.com/chapters/create-a-login-page.html
@@ -16,6 +16,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
 
   function validateForm() {
@@ -32,6 +33,7 @@ export default function Register() {
         await axios.post("http://localhost/db-project/BlurbBackend/index.php/createUser", data).then(res => {
 
             setLoggedIn("It worked");
+            navigate('/login')
 
         })
     } catch (error) {
@@ -79,3 +81,4 @@ export default function Register() {
     </div>
   );
 }
+
