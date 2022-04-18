@@ -8,6 +8,7 @@ import {Nav, Navbar} from 'react-bootstrap';
 import {BrowserRouter, Route, Routes, Redirect} from 'react-router-dom';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import CommentFeed from './components/CommentFeed.js';
 
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
           <Route path='/feed' element={<Feed /> } />
           <Route path='/create' element={<CreateBlurb /> } />
           <Route path='/profile' element={<Profile /> } />
+          <Route path='/comments' element={<CommentFeed /> } />
           <Route path='*' element={<Login />} />
         </Routes>
       </div>

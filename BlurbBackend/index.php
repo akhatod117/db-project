@@ -55,6 +55,13 @@ switch($method){
                 echo json_encode(getUserPosts($uri[4]));
             }
         }
+        else if($uri[3] == 'getUserComments'){
+            if($uri[4] == null){
+                
+            }else{
+                echo json_encode(getUserComments($uri[4]));
+            }
+        }
         
         break;
         
@@ -97,6 +104,18 @@ switch($method){
             $date = htmlspecialchars(strip_tags($data['date']));
             $thread = htmlspecialchars(strip_tags($data['thread']));
             createBlurb($description, $uid, $numberOfLikes, $date, $thread);
+        }
+        else if($uri[3] == 'getComments'){
+            
+            $uid = htmlspecialchars(strip_tags($data['uid']));
+            $pid = htmlspecialchars(strip_tags($data['pid']));
+            getComments($uid, $pid);
+        }
+        else if($uri[3] == 'deletePost'){
+            
+            $uid = htmlspecialchars(strip_tags($data['uid']));
+            $pid = htmlspecialchars(strip_tags($data['pid']));
+            deletePost($uid, $pid);
         }
         break;
 }

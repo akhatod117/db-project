@@ -15,6 +15,8 @@ function Profile(){
     const [userInfo, setUserInfo] = useState([]);
     let [posts,setPosts] = useState([]);
 
+    const [comment, setComments] = useState([]);
+
 
     useEffect( () =>{
         
@@ -33,6 +35,10 @@ function Profile(){
                         setPosts(userPosts)
                         console.log(posts);
             }) 
+            axios.get("http://localhost/db-project/BlurbBackend/index.php/getUserComments/" + uid)
+                    .then(com=>{
+                        setComments(com.data);
+            })
         
     },[])
 
@@ -64,6 +70,15 @@ function Profile(){
                 </div>
             </div>
 
+            <div>
+                My Comments:
+                <div>
+                    {comment.length ? comment.map((p) => (
+                        <Post key={p.uid + p.pid} post={p}/>
+                    )): <p>No Posts</p>}
+                </div>
+            </div>
+
         </div>
     );
 }
@@ -75,6 +90,17 @@ export default Profile;
 function Post({post,uid}){
     //need: user-id, post text, post date, comments(add after posts are working)
     
+
+    async function postDelete(){
+        const data = {
+            uid: post.uid,
+            pid: post.pid,
+        }
+
+        
+        axios.post("http://localhost/db-project/BlurbBackend/index.php/deletePost", data)
+                
+    }
 
     return (
         
@@ -104,9 +130,43 @@ function Post({post,uid}){
                         <span>
                         <Button variant="primary">Comments </Button>
                         </span>
+
+                        <span>
+                        <Button variant="primary" onClick={postDelete}>Delete</Button>
+                        </span>
                         
                     </div>
                     
+                    </div>
+            </div>
+        
+    );
+}
+
+function Comment({comment}){
+    //need: user-id, post text, post date, comments(add after posts are working)
+    
+
+    return (
+        
+            <div className="post">
+                <div className = "postWrapper">
+                    <div className = "postTop">
+                        <div className = 'postDescription'>
+                            {comment.commentText}
+                        </div>
+
+                        <div>
+                            Comment {comment.commentID} from Post {comment.pid}
+                        </div>
+                        
+                    </div>
+
+                    
+                    <div className = 'userName'>
+                        by {comment.commenterUsername} on {comment.date}
+                    </div>
+                        
                     </div>
             </div>
         

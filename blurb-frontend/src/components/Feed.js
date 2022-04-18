@@ -5,7 +5,7 @@ import './Post.css';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {Nav, Navbar} from 'react-bootstrap';
-import {BrowserRouter, Route, Switch, useLocation, Link} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, useLocation, Link, useNavigate} from 'react-router-dom';
 
 
 
@@ -24,7 +24,7 @@ export default function Feed(){
     console.log("location: ", location);
     const uid = location.state.uid;
     console.log('uid: ', uid);
-
+    const navigate = useNavigate();
 
 
 
@@ -61,6 +61,7 @@ export default function Feed(){
             }
         }
       }
+
 
 
     useEffect( () =>{
@@ -133,7 +134,7 @@ export default function Feed(){
             
             <div>
                 {posts.map((p) => (
-                    <Post key={p.uid + p.pid} post={p} changedLikes = {changedLikes} setLikes = {setLikes} uid={uid}/>
+                    <Post key={p.uid + p.pid} post={p} changedLikes = {changedLikes} setLikes = {setLikes} uid={uid} navigate = {navigate}/>
                 ))}
             </div>
             <div>
@@ -144,7 +145,7 @@ export default function Feed(){
     );
 }
 
-function Post({post, changedLikes, setLikes,uid}){
+function Post({post, changedLikes, setLikes,uid, navigate}){
     //need: user-id, post text, post date, comments(add after posts are working)
     
 
@@ -155,12 +156,18 @@ function Post({post, changedLikes, setLikes,uid}){
             pid: post.pid,
             likeUid: uid,
         }
+
         
         axios.post("http://localhost/db-project/BlurbBackend/index.php/incrementLikes", data)
                 .then(res=>{
                 setLikes(!changedLikes);
         })
     }
+
+    async function handleComment(event) {
+        event.preventDefault();
+        navigate('/comment', { state: {post: post}})
+      }
 
     return (
         
@@ -191,9 +198,34 @@ function Post({post, changedLikes, setLikes,uid}){
 
                     <div>
                         <span>
-                        <Button variant="primary" onClick={incrementLikes}>Comments </Button>
+                        <Button variant="primary" onClick={handleComment}>Comments </Button>
                         </span>
                         
+                    </div>
+                    
+                    </div>
+            </div>
+        
+    );
+}
+
+function Comment({comment}){
+    //need: user-id, post text, post date, comments(add after posts are working)
+
+    return (
+        
+            <div className="post">
+                <div className = "postWrapper">
+                    <div className = "postTop">
+                        <div className = 'postDescription'>
+                            {comment.commentText}
+                        </div>
+                        
+                    </div>
+
+                    
+                    <div className = 'userName'>
+                        by {comment.commenterUID} on {comment.date}
                     </div>
                     
                     </div>

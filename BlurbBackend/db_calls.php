@@ -221,6 +221,30 @@ function getUserByUID($usr)
 	}
 }
 
+function getUserComments($uid)
+{
+        global $db;
+        $query = "select * from Comment where uid = :uid";
+		//$statement = $db->query($query);
+	
+	//1. prepare
+	//2. bindValue & execute
+	$statement = $db->prepare($query);
+	$statement->bindValue(':uid', $uid);
+	$statement->execute();
+	
+	// fetchAll() returns an array of all rows in the result set
+	if(!$statement){
+	   die("retrieve all query failed");
+	}else{
+	   $results = $statement->fetch(PDO::FETCH_OBJ);   
+
+	   $statement->closeCursor();
+
+	   return $results;
+	}
+}
+
 function getUserInfo($uid)
 {
         global $db;
@@ -609,6 +633,30 @@ function deleteFriend($name)
    }else{
 	$statement->closeCursor();
    }
+}
+function deletePost($uid, $pid)
+{
+        global $db;
+        $query = "delete from Post where uid = :uid and pid =:pid";
+		//$statement = $db->query($query);
+	
+	//1. prepare
+	//2. bindValue & execute
+	$statement = $db->prepare($query);
+	$statement->bindValue(':uid', $uid);
+	$statement->bindValue(':pid', $pid);
+	$statement->execute();
+	
+	// fetchAll() returns an array of all rows in the result set
+	if(!$statement){
+	   die("retrieve all query failed");
+	}else{
+	   $results = $statement->fetch(PDO::FETCH_OBJ);   
+
+	   $statement->closeCursor();
+
+	   return $results;
+	}
 }
 
 
